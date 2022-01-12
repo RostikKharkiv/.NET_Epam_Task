@@ -190,9 +190,11 @@ namespace Task_2._1._2
                         break;
                     }
                 case "2":
+                    int i = 0;
                     foreach (var item in user.Figures)
                     {
-                        Console.WriteLine(item);
+                        Console.WriteLine($"Id - {i} {item}");
+                        i++;
                     }
                     Console.WriteLine();
                     ShowMenu();
@@ -204,8 +206,48 @@ namespace Task_2._1._2
                     if (user.Figures.Contains(user.Figures.ElementAt(id)))
                     {
                         Figure figure = user.Figures.ElementAt(id);
-                        Console.WriteLine(figure.Length);
-                        Console.WriteLine(figure.Square);
+
+                        if (figure is Side)
+                        {
+                            Side side = figure as Side;
+                            Console.WriteLine($"{side}" +
+                                $"{Environment.NewLine}Длина линии: {side.Length}");
+                        }
+                        else if (figure is Circle)
+                        {
+                            Circle circle = figure as Circle;
+                            Console.WriteLine($"{circle}" +
+                                $"{Environment.NewLine}Длина круга: {circle.Length}" +
+                                $"{Environment.NewLine}Площадь круга: {circle.Square}");
+                        }
+                        else if (figure is Ring)
+                        {
+                            Ring ring = figure as Ring;
+                            Console.WriteLine($"{ring}" +
+                                $"{Environment.NewLine}Длина кольца: {ring.Length}" +
+                                $"{Environment.NewLine}Площадь кольца: {ring.Square}");
+                        }
+                        else if (figure is Triangle)
+                        {
+                            Triangle triangle = figure as Triangle;
+                            Console.WriteLine($"{triangle}" +
+                                $"{Environment.NewLine}Периметр треугольника: {triangle.Perimeter}" +
+                                $"{Environment.NewLine}Площадь треугольника: {triangle.Square}");
+                        }
+                        else if (figure is Rectangle)
+                        {
+                            Rectangle rectangle = figure as Rectangle;
+                            Console.WriteLine($"{rectangle}" +
+                                $"{Environment.NewLine}Периметр четырёхугольника: {rectangle.Perimeter}" +
+                                $"{Environment.NewLine}Площадь четырёхугольника: {rectangle.Square}");
+                        }
+                        else if (figure is SquareFigure)
+                        {
+                            SquareFigure squareFigure = figure as SquareFigure;
+                            Console.WriteLine($"{squareFigure}" +
+                                $"{Environment.NewLine}Периметр квадрата: {squareFigure.Perimeter}" +
+                                $"{Environment.NewLine}Площадь квадрата: {squareFigure.Square}");
+                        }
                     }
                     else
                     {
