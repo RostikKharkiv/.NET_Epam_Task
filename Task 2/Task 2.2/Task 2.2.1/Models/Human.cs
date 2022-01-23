@@ -52,6 +52,8 @@ namespace Task_2._2._1.Models
 
         public Point CurrentPoint { get; protected set; }
 
+        public MoveDirection Direction { get; protected set; }
+
         public Human()
         {
             Health = 100;
@@ -59,6 +61,7 @@ namespace Task_2._2._1.Models
             Strength = 15;
             Items = new List<Item>();
             Visability = new List<Point>();
+            Direction = MoveDirection.Left;
         }
 
         public void Hit(Human human)
@@ -97,7 +100,7 @@ namespace Task_2._2._1.Models
             {
                 for (int y = CurrentPoint.Y - r; y <= CurrentPoint.Y + r; y++)
                 {
-                    if (x >= 0 && x < field.GetUpperBound(1) && y >= 0 && y < field.GetUpperBound(2))
+                    if (x >= 0 && x <= field.GetUpperBound(0) && y >= 0 && y <= field.GetUpperBound(1))
                     {
                         Visability.Add(new Point(x, y));
                     }
@@ -113,11 +116,11 @@ namespace Task_2._2._1.Models
                 && !(field[CurrentPoint.X, CurrentPoint.Y - 1] is Obstacle):
                     CurrentPoint = new Point(CurrentPoint.X, CurrentPoint.Y - 1);
                     return MoveDirection.Up;
-                case MoveDirection.Right when (CurrentPoint.X + 1 < field.GetUpperBound(1))
+                case MoveDirection.Right when (CurrentPoint.X + 1 <= field.GetUpperBound(0))
                 && !(field[CurrentPoint.X + 1, CurrentPoint.Y] is Obstacle):
                     CurrentPoint = new Point(CurrentPoint.X + 1, CurrentPoint.Y);
                     return MoveDirection.Right;
-                case MoveDirection.Down when (CurrentPoint.Y + 1 < field.GetUpperBound(2))
+                case MoveDirection.Down when (CurrentPoint.Y + 1 <= field.GetUpperBound(1))
                 && !(field[CurrentPoint.X, CurrentPoint.Y + 1] is Obstacle):
                     CurrentPoint = new Point(CurrentPoint.X, CurrentPoint.Y + 1);
                     return MoveDirection.Down;
@@ -187,6 +190,7 @@ namespace Task_2._2._1.Models
         public Player()
         {
             VisabilityRadius = 6;
+            Direction = MoveDirection.Right;
         }
     }
 

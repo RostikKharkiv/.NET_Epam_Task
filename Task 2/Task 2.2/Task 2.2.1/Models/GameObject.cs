@@ -24,7 +24,7 @@ namespace Task_2._2._1.Models
 
     public class Chest : GameObject
     {
-        public List<Item> Items { get; private set; } = new List<Item>();
+        public LinkedList<Item> Items { get; private set; } = new LinkedList<Item>();
 
         public bool IsEmpty => Items.Count() == 0;
 
@@ -32,29 +32,29 @@ namespace Task_2._2._1.Models
 
         public void GenerateItemsLow()
         {
-            for (int i = 0; i < rnd.Next(1, 4); i++) 
+            for (int i = 0; i < rnd.Next(1, 100); i++) 
             {
                 int randomItem = rnd.Next(0, 5);
 
                 switch(randomItem)
                 {
                     case 0:
-                        Items.Add(new WeakHealthPotion());
+                        Items.AddLast(new WeakHealthPotion());
                         break;
                     case 1:
-                        Items.Add(new Bread());
+                        Items.AddLast(new Bread());
                         break;
                     case 2:
-                        Items.Add(new Ale());
+                        Items.AddLast(new Ale());
                         break;
                     case 3:
-                        Items.Add(new ApplePie());
+                        Items.AddLast(new ApplePie());
                         break;
                     case 4:
-                        Items.Add(new PureWater());
+                        Items.AddLast(new PureWater());
                         break;
                     case 5:
-                        Items.Add(new Steak());
+                        Items.AddLast(new Steak());
                         break;
                     default:
                         break;
@@ -71,13 +71,13 @@ namespace Task_2._2._1.Models
                 switch (randomItem)
                 {
                     case 0:
-                        Items.Add(new HealthPotion());
+                        Items.AddLast(new HealthPotion());
                         break;
                     case 1:
-                        Items.Add(new StrongHealthPotion());
+                        Items.AddLast(new StrongHealthPotion());
                         break;
                     case 2:
-                        Items.Add(new WeakHealthPotion());
+                        Items.AddLast(new WeakHealthPotion());
                         break;
                     default:
                         break;
@@ -87,7 +87,7 @@ namespace Task_2._2._1.Models
 
         public void AddItem(Item item)
         {
-            Items.Add(item);
+            Items.AddLast(item);
         }
     }
 

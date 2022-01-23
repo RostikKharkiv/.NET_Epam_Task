@@ -27,6 +27,11 @@ namespace Task_2._2._1.Models
         {
             HealthChange = 5;
         }
+
+        public override string ToString()
+        {
+            return "Хлеб";
+        }
     }
 
     public class ApplePie : Food
@@ -34,6 +39,11 @@ namespace Task_2._2._1.Models
         public ApplePie()
         {
             HealthChange = 7;
+        }
+
+        public override string ToString()
+        {
+            return "Яблочный пирог";
         }
     }
 
@@ -43,6 +53,11 @@ namespace Task_2._2._1.Models
         {
             HealthChange = 3;
         }
+
+        public override string ToString()
+        {
+            return "Чистая вода";
+        }
     }
 
     public class Ale : Food
@@ -50,6 +65,11 @@ namespace Task_2._2._1.Models
         public Ale()
         {
             HealthChange = 5;
+        }
+
+        public override string ToString()
+        {
+            return "Эль";
         }
     }
 
@@ -59,6 +79,11 @@ namespace Task_2._2._1.Models
         {
             HealthChange = 10;
         }
+
+        public override string ToString()
+        {
+            return "Стейк";
+        }
     }
 
     public class WeakHealthPotion : Potion
@@ -66,6 +91,11 @@ namespace Task_2._2._1.Models
         public WeakHealthPotion()
         {
             HealthChange = 25;
+        }
+
+        public override string ToString()
+        {
+            return "Слабое зелье здоровья";
         }
     }
 
@@ -75,6 +105,11 @@ namespace Task_2._2._1.Models
         {
             HealthChange = 50;
         }
+
+        public override string ToString()
+        {
+            return "Зелье здоровья";
+        }
     }
 
     public class StrongHealthPotion : Potion
@@ -82,6 +117,11 @@ namespace Task_2._2._1.Models
         public StrongHealthPotion()
         {
             HealthChange = 100;
+        }
+
+        public override string ToString()
+        {
+            return "Сильное зелье здоровья";
         }
     }
 
