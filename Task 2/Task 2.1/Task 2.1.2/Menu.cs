@@ -203,7 +203,7 @@ namespace Task_2._1._2
                     Console.Write("Введите id фигуры: ");
                     int id;
                     int.TryParse(Console.ReadLine(), out id);
-                    if (user.Figures.Contains(user.Figures.ElementAt(id)))
+                    if (id < user.Figures.Count && id >= 0)
                     {
                         Figure figure = user.Figures.ElementAt(id);
 
