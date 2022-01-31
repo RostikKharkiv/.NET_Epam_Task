@@ -107,7 +107,9 @@ namespace Task_2._1._2
         public Circle Outer { get; private set; }
         public Circle Inner { get; private set; }
         public double Length => Outer.Length + Inner.Length;
-        public double Square => Math.PI * (Outer.Square - Inner.Square);
+        public double Square => Outer.Square > Inner.Square ? 
+            Math.PI * (Outer.Square - Inner.Square) 
+            : Math.PI * (Inner.Square - Outer.Square);
 
         public Ring(double x, double y, double outerRadius, double innerRadius)
         {
