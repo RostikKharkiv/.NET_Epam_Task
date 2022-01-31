@@ -12,12 +12,31 @@ namespace Task_2._1._1
 
         public bool Equals(CustomString obj)
         {
-            return (new string(this.line).Equals(new string(obj.line)));
+            if (this.Length != obj.Length)
+                return false;
+            for (int i = 0; i < Length; i++)
+            { 
+                if (this.line[i] != obj.line[i])
+                    return false;
+            }
+            return true;
         }
 
         public bool Contains(string subStr)
         {
-            return (new string(line).Contains(subStr));
+            return line.ToString().Contains(subStr);
+        }
+
+        public CustomString Concat(CustomString str)
+        {
+            char[] newLine = new char[this.Length + str.Length];
+
+            this.line.CopyTo(newLine, 0);
+            str.line.CopyTo(newLine, this.Length);
+
+            this.line = newLine;
+
+            return this;
         }
 
         public List<double> FindNumbers()
@@ -128,7 +147,27 @@ namespace Task_2._1._1
         }
 
         public static CustomString operator +(CustomString str1, CustomString str2)
-            => new CustomString((str1.ToString()+str2.ToString()).ToCharArray());
+        {
+            char[] newLine = new char[str1.Length + str2.Length];
+
+            str1.line.CopyTo(newLine, 0);
+            str2.line.CopyTo(newLine, str2.Length);
+
+            str1.line = newLine;
+
+            return str1;
+        }
+
+        public static bool operator ==(CustomString str1, CustomString str2)
+        {
+            return str1.Equals(str2);
+        }
+
+        public static bool operator !=(CustomString str1, CustomString str2)
+        {
+            return !str1.Equals(str2);
+        }
+
 
         public static implicit operator CustomString(char[] charArray)
         {
