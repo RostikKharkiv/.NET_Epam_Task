@@ -7,11 +7,16 @@ namespace Task_2._2._1
     {
         static void Main(string[] args)
         {
-            Chest chest = new Chest();
-            chest.GenerateItemsLow();
+            //Game.Game.GenerateField();
+            //Chest chest = new Chest();
+            //chest.GenerateItemsLow();
 
 
-            Game.Game.ChestItems(chest);
+            //Game.Game.CheckItems(chest.Items);
+            Game.Game.GenerateField();
+            Game.Game.PaintField();
+
+            Game.Game.HeroMove();
         }
     }
 }

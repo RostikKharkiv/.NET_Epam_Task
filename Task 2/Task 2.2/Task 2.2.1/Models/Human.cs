@@ -42,7 +42,7 @@ namespace Task_2._2._1.Models
 
         public bool IsAlive => Health == 0 ? false : true;
 
-        public List<Item> Items { get; protected set; }
+        public LinkedList<Item> Items { get; protected set; }
 
         public int VisabilityRadius { get; protected set; }
 
@@ -50,7 +50,7 @@ namespace Task_2._2._1.Models
 
         public Point StartPoint { get; protected set; }
 
-        public Point CurrentPoint { get; protected set; }
+        public Point CurrentPoint { get; set; }
 
         public MoveDirection Direction { get; protected set; }
 
@@ -59,7 +59,7 @@ namespace Task_2._2._1.Models
             Health = 100;
             Armor = 0;
             Strength = 15;
-            Items = new List<Item>();
+            Items = new LinkedList<Item>();
             Visability = new List<Point>();
             Direction = MoveDirection.Left;
         }
@@ -82,6 +82,13 @@ namespace Task_2._2._1.Models
                     Health = 100;
                 Items.Remove(item);
             }
+            else if (item is Food)
+            {
+                Health += item.HealthChange;
+                if (Health > 100)
+                    Health = 100;
+                Items.Remove(item);
+            }
             else if (item is Weapon)
                 Strength = item.StrengthImpact;
             else if (item is Armor)
@@ -90,15 +97,15 @@ namespace Task_2._2._1.Models
 
         public void PickUp(Item item)
         {
-            Items.Add(item);
+            Items.AddLast(item);
         }
 
-        public void CheckVisability(int r, GameObject[,] field)
+        public void CheckVisability(GameObject[,] field)
         {
             Visability.Clear();
-            for (int x = CurrentPoint.X - r; x <= CurrentPoint.X + r; x++)
+            for (int x = CurrentPoint.X - VisabilityRadius; x <= CurrentPoint.X + VisabilityRadius; x++)
             {
-                for (int y = CurrentPoint.Y - r; y <= CurrentPoint.Y + r; y++)
+                for (int y = CurrentPoint.Y - VisabilityRadius; y <= CurrentPoint.Y + VisabilityRadius; y++)
                 {
                     if (x >= 0 && x <= field.GetUpperBound(0) && y >= 0 && y <= field.GetUpperBound(1))
                     {
@@ -112,24 +119,44 @@ namespace Task_2._2._1.Models
         {
             switch (moveDirection)
             {
-                case MoveDirection.Up when (CurrentPoint.Y - 1 >= 0) 
+                case MoveDirection.Left when (CurrentPoint.Y - 1 >= 0) 
                 && !(field[CurrentPoint.X, CurrentPoint.Y - 1] is Obstacle):
-                    CurrentPoint = new Point(CurrentPoint.X, CurrentPoint.Y - 1);
-                    return MoveDirection.Up;
-                case MoveDirection.Right when (CurrentPoint.X + 1 <= field.GetUpperBound(0))
+                    if (!(field[CurrentPoint.X, CurrentPoint.Y - 1] is Chest))
+                    {
+                        field[CurrentPoint.X, CurrentPoint.Y] = new None();
+                        CurrentPoint = new Point(CurrentPoint.X, CurrentPoint.Y - 1);
+                        field[CurrentPoint.X, CurrentPoint.Y] = this;
+                    }
+                    return Direction = MoveDirection.Left;
+                case MoveDirection.Down when (CurrentPoint.X + 1 <= field.GetUpperBound(0))
                 && !(field[CurrentPoint.X + 1, CurrentPoint.Y] is Obstacle):
-                    CurrentPoint = new Point(CurrentPoint.X + 1, CurrentPoint.Y);
-                    return MoveDirection.Right;
-                case MoveDirection.Down when (CurrentPoint.Y + 1 <= field.GetUpperBound(1))
+                    if (!(field[CurrentPoint.X + 1, CurrentPoint.Y] is Chest))
+                    {
+                        field[CurrentPoint.X, CurrentPoint.Y] = new None();
+                        CurrentPoint = new Point(CurrentPoint.X + 1, CurrentPoint.Y);
+                        field[CurrentPoint.X, CurrentPoint.Y] = this;
+                    }
+                    return Direction = MoveDirection.Down;
+                case MoveDirection.Right when (CurrentPoint.Y + 1 <= field.GetUpperBound(1))
                 && !(field[CurrentPoint.X, CurrentPoint.Y + 1] is Obstacle):
-                    CurrentPoint = new Point(CurrentPoint.X, CurrentPoint.Y + 1);
-                    return MoveDirection.Down;
-                case MoveDirection.Left when (CurrentPoint.X - 1 >= 0)
+                    field[CurrentPoint.X, CurrentPoint.Y] = new None();
+                    if (!(field[CurrentPoint.X, CurrentPoint.Y + 1] is Chest))
+                    {
+                        CurrentPoint = new Point(CurrentPoint.X, CurrentPoint.Y + 1);
+                        field[CurrentPoint.X, CurrentPoint.Y] = this;
+                    }
+                    return Direction = MoveDirection.Right;
+                case MoveDirection.Up when (CurrentPoint.X - 1 >= 0)
                 && !(field[CurrentPoint.X - 1, CurrentPoint.Y] is Obstacle):
-                    CurrentPoint = new Point(CurrentPoint.X - 1, CurrentPoint.Y);
-                    return MoveDirection.Left;
+                    if (!(field[CurrentPoint.X - 1, CurrentPoint.Y] is Chest))
+                    {
+                        field[CurrentPoint.X, CurrentPoint.Y] = new None();
+                        CurrentPoint = new Point(CurrentPoint.X - 1, CurrentPoint.Y);
+                        field[CurrentPoint.X, CurrentPoint.Y] = this;
+                    }
+                    return Direction = MoveDirection.Up;
                 default:
-                    return MoveDirection.None;
+                    return Direction = MoveDirection.None;
             }
         }
 
@@ -138,50 +165,59 @@ namespace Task_2._2._1.Models
             int xRange = human.CurrentPoint.X - this.CurrentPoint.X;
             int yRange = human.CurrentPoint.Y - this.CurrentPoint.Y;
 
+            MoveDirection left = MoveDirection.Left;
+            MoveDirection right = MoveDirection.Right;
+            MoveDirection up = MoveDirection.Up;
+            MoveDirection down = MoveDirection.Down;
+            MoveDirection none = MoveDirection.None;
+
+            var field = Game.Game.Field;
+
             if (xRange < 0 && yRange <= 0)
             {
-                if (this.Move(MoveDirection.Left, Game.Game.Field) == MoveDirection.None)
-                    if (this.Move(MoveDirection.Up, Game.Game.Field) == MoveDirection.None)
-                        if (this.Move(MoveDirection.Right, Game.Game.Field) == MoveDirection.None)
-                            this.Move(MoveDirection.Down, Game.Game.Field);
+                if (Move(up, field) == none)
+                    if (Move(left, field) == none)
+                        if (Move(down, field) == none)
+                            Move(right, field);
             }
             else if (xRange > 0 && yRange <= 0)
             {
-                if (this.Move(MoveDirection.Right, Game.Game.Field) == MoveDirection.None)
-                    if (this.Move(MoveDirection.Up, Game.Game.Field) == MoveDirection.None)
-                        if (this.Move(MoveDirection.Left, Game.Game.Field) == MoveDirection.None)
-                            this.Move(MoveDirection.Down, Game.Game.Field);
+
+                if (Move(down, field) == none)
+                    if (Move(left, field) == none)
+                        if (Move(up, field) == none)
+                            Move(right, field);
             }
             else if (xRange > 0 && yRange >= 0)
             {
-                if (this.Move(MoveDirection.Right, Game.Game.Field) == MoveDirection.None)
-                    if (this.Move(MoveDirection.Down, Game.Game.Field) == MoveDirection.None)
-                        if (this.Move(MoveDirection.Left, Game.Game.Field) == MoveDirection.None)
-                            this.Move(MoveDirection.Up, Game.Game.Field);
+                if (Move(down, field) == none)
+                    if (Move(right, field) == none)
+                        if (Move(up, field) == none)
+                            Move(left, field);
             }
             else if (xRange < 0 && yRange >= 0)
             {
-                if (this.Move(MoveDirection.Left, Game.Game.Field) == MoveDirection.None)
-                    if (this.Move(MoveDirection.Down, Game.Game.Field) == MoveDirection.None)
-                        if (this.Move(MoveDirection.Right, Game.Game.Field) == MoveDirection.None)
-                            this.Move(MoveDirection.Up, Game.Game.Field);
+                if (Move(up, field) == none)
+                    if (Move(right, field) == none)
+                        if (Move(down, field) == none)
+                            Move(left, field);
             }
             else if (xRange == 0 && yRange > 0)
             {
-                if (this.Move(MoveDirection.Down, Game.Game.Field) == MoveDirection.None)
-                    if (this.Move(MoveDirection.Left, Game.Game.Field) == MoveDirection.None)
-                        if (this.Move(MoveDirection.Right, Game.Game.Field) == MoveDirection.None)
-                            this.Move(MoveDirection.Up, Game.Game.Field);
+                if (Move(right, field) == none)
+                    if (Move(up, field) == none)
+                        if (Move(down, field) == none)
+                            Move(left, field);
             }
             else if (xRange == 0 && yRange < 0)
             {
-                if (this.Move(MoveDirection.Up, Game.Game.Field) == MoveDirection.None)
-                    if (this.Move(MoveDirection.Left, Game.Game.Field) == MoveDirection.None)
-                        if (this.Move(MoveDirection.Right, Game.Game.Field) == MoveDirection.None)
-                            this.Move(MoveDirection.Down, Game.Game.Field);
+                if (Move(left, field) == none)
+                    if (Move(up, field) == none)
+                        if (Move(down, field) == none)
+                            Move(right, field);
             }
             else
-                this.Move(MoveDirection.None, Game.Game.Field);
+                Move(none, field);
         }
     }
 
@@ -191,6 +227,11 @@ namespace Task_2._2._1.Models
         {
             VisabilityRadius = 6;
             Direction = MoveDirection.Right;
+        }
+
+        public override string ToString()
+        {
+            return "Главный герой";
         }
     }
 
@@ -202,6 +243,11 @@ namespace Task_2._2._1.Models
             Strength = 25;
             VisabilityRadius = 3;
         }
+
+        public override string ToString()
+        {
+            return "Воин в лёгкой броне";
+        }
     }
 
     public class Warrior : Human
@@ -212,6 +258,11 @@ namespace Task_2._2._1.Models
             Strength = 35;
             VisabilityRadius = 2;
         }
+
+        public override string ToString()
+        {
+            return "Воин";
+        }
     }
 
     public class HeavyWarrior : Human
@@ -221,6 +272,11 @@ namespace Task_2._2._1.Models
             Armor = 25;
             Strength = 50;
             VisabilityRadius = 2;
+        }
+
+        public override string ToString()
+        {
+            return "Воин в тяжёлой броне";
         }
     }
 }

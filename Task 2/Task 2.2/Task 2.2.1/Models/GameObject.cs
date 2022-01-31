@@ -32,7 +32,7 @@ namespace Task_2._2._1.Models
 
         public void GenerateItemsLow()
         {
-            for (int i = 0; i < rnd.Next(1, 100); i++) 
+            for (int i = 0; i < rnd.Next(1, 10); i++) 
             {
                 int randomItem = rnd.Next(0, 5);
 
@@ -64,7 +64,7 @@ namespace Task_2._2._1.Models
 
         public void GenerateItemsMedium()
         {
-            for (int i = 0; i < rnd.Next(1, 3); i++)
+            for (int i = 0; i < rnd.Next(1, 10); i++)
             {
                 int randomItem = rnd.Next(0, 2);
 

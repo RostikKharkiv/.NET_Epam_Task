@@ -16,10 +16,34 @@ namespace Task_2._2._1.Models
 
     }
 
-    public class Potion : Item { }
-    public class Food : Item { }
-    public class Weapon : Item { }
-    public class Armor : Item { }
+    public class Potion : Item
+    {
+        public override string ToString()
+        {
+            return "Зелье";
+        }
+    }
+    public class Food : Item 
+    {
+        public override string ToString()
+        {
+            return "Еда";
+        }
+    }
+    public class Weapon : Item
+    {
+        public override string ToString()
+        {
+            return "Оружие";
+        }
+    }
+    public class Armor : Item
+    {
+        public override string ToString()
+        {
+            return "Броня";
+        }
+    }
 
     public class Bread : Food
     {
@@ -131,6 +155,11 @@ namespace Task_2._2._1.Models
         {
             StrengthImpact = 25;
         }
+
+        public override string ToString()
+        {
+            return "Железный кинжал";
+        }
     }
 
     public class Sword : Weapon
@@ -138,6 +167,11 @@ namespace Task_2._2._1.Models
         public Sword()
         {
             StrengthImpact = 35;
+        }
+
+        public override string ToString()
+        {
+            return "Железный меч";
         }
     }
 
@@ -147,6 +181,11 @@ namespace Task_2._2._1.Models
         {
             StrengthImpact = 50;
         }
+
+        public override string ToString()
+        {
+            return "Двуручный железный меч";
+        }
     }
 
     public class GreatHammer : Weapon
@@ -154,6 +193,11 @@ namespace Task_2._2._1.Models
         public GreatHammer()
         {
             StrengthImpact = 70;
+        }
+
+        public override string ToString()
+        {
+            return "Двуручный боевой молот";
         }
     }
 
@@ -164,6 +208,11 @@ namespace Task_2._2._1.Models
         {
             ArmorRate = 10;
         }
+
+        public override string ToString()
+        {
+            return "Кожаная броня";
+        }
     }
 
     public class IronArmor : Armor
@@ -172,6 +221,11 @@ namespace Task_2._2._1.Models
         {
             ArmorRate = 15;
         }
+
+        public override string ToString()
+        {
+            return "Железная броня";
+        }
     }
 
     public class SteelArmor : Armor
@@ -179,6 +233,11 @@ namespace Task_2._2._1.Models
         public SteelArmor()
         {
             ArmorRate = 25;
+        }
+
+        public override string ToString()
+        {
+            return "Стальная броня";
         }
     }
 }
