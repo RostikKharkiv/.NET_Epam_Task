@@ -158,17 +158,6 @@ namespace Task_2._1._1
             return str1;
         }
 
-        public static bool operator ==(CustomString str1, CustomString str2)
-        {
-            return str1.Equals(str2);
-        }
-
-        public static bool operator !=(CustomString str1, CustomString str2)
-        {
-            return !str1.Equals(str2);
-        }
-
-
         public static implicit operator CustomString(char[] charArray)
         {
             return new CustomString { line = charArray };
