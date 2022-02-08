@@ -29,11 +29,15 @@ namespace Task_3._2._1
                 }
                 else if (value < Length && value > 0)
                 {
-                    RemoveRange(value, Length);
+                    RemoveRange(value, Length - 1);
 
                     Length = value;
 
                     _capacity = value;
+                }
+                else
+                {
+                    throw new ArgumentOutOfRangeException("Capacity should be positive");
                 }
             }
         }
@@ -69,6 +73,9 @@ namespace Task_3._2._1
 
         public bool Equals(DynamicArray<T> obj)
         {
+            // Я думаю проверку на Capacity делать не надо,
+            // проверяем конкретно объекты
+
             if (this == null || obj == null)
             {
                 return false;
@@ -110,12 +117,16 @@ namespace Task_3._2._1
                 index = Length - Math.Abs(index) % Length;
                 return true;
             }
+            else if (index >= 0 && index < Length)
+            {
+                return true;
+            }
 
             return false;
 
             //if (index >= Length || index < 0)
             //{
-            //    throw new IndexOutOfRangeException("Index should be lower than length of array and greater or equals than zero");
+            //    throw new IndexOutOfRangeException("Index should be lower than length of array and greater than or equals to zero");
             //}
         }
 
@@ -143,9 +154,9 @@ namespace Task_3._2._1
 
         public bool Remove(T obj) => RemoveAt(IndexOf(obj));
 
-        public bool RemoveFirst(T obj) => RemoveAt(0);
+        public bool RemoveFirst() => RemoveAt(0);
 
-        public bool RemoveLast(T obj) => RemoveAt(Length - 1);
+        public bool RemoveLast() => RemoveAt(Length - 1);
 
         public bool AddFirst(T obj) => InsertAt(obj, 0);
 
@@ -252,21 +263,22 @@ namespace Task_3._2._1
                 return false;
             }
 
-            long temp;
-
             if (index2 < index1)
             {
-                temp = index1;
+                long temp = index1;
                 index1 = index2;
                 index2 = index1;
             }
 
+            int count = -1;
+
             try
             {
-                for (long i = index1; i < index2; i++)
+                do
                 {
-                    RemoveAt(i);
-                }
+                    RemoveAt(index1);
+                    count++;
+                } while (count != index2 - index1);
 
                 return true;
             }
