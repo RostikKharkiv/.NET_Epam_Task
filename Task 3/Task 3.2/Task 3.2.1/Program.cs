@@ -18,14 +18,16 @@ namespace Task_3._2._1
                 stringArray2.AddLast($"{i}");
             }
 
-            stringArray2.RemoveRange(2, 6);
+            List<string> stringList = stringArray2.ToList();
 
-            Console.WriteLine(stringArray.Equals(stringArray2));
+            Console.WriteLine(stringArray2.GetType());
 
-            foreach (var item in stringArray2)
+            foreach (var item in stringList)
             {
-                Console.Write($"{item} ");
+                Console.WriteLine(item);
             }
+
+            Console.WriteLine(stringList.GetType());
         }
     }
 }

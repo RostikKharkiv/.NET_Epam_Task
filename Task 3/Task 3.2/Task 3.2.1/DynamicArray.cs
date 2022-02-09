@@ -71,6 +71,14 @@ namespace Task_3._2._1
 
         }
 
+        public bool Contains(T obj)
+        {
+            if (obj is null)
+                return false;
+
+            return this.Any(o => o.Equals(obj));
+        }
+
         public bool Equals(DynamicArray<T> obj)
         {
             // Я думаю проверку на Capacity делать не надо,
@@ -304,6 +312,18 @@ namespace Task_3._2._1
             }
         }
 
+        public List<T> ToList()
+        {
+            List<T> list = new List<T>();
+
+            foreach (var item in this)
+            {
+                list.Add(item);
+            }
+
+            return list;
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             return new DynamicArrayEnumerator(this);
@@ -387,7 +407,7 @@ namespace Task_3._2._1
 
     public class CycledDynamicArray<T> : DynamicArray<T>, IEnumerable<T>
     {
-        public IEnumerator<T> GetEnumerator()
+        public new IEnumerator<T> GetEnumerator()
         {
             return new CycledDynamicArrayEnumerator(this);
         }
