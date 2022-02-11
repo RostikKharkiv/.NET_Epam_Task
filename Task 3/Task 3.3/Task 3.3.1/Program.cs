@@ -9,7 +9,7 @@ namespace Task_3._3._1
         public static void Main(string[] args)
         {
             int[] mass = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-            int[] mass2 = { 4, 10 };
+            int[] mass2 = { };
 
             int Increase(int el) => el * 3;
 
