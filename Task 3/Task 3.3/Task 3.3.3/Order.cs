@@ -10,9 +10,11 @@ namespace Task_3._3._3
     {
         private static int _orderIdCount = 0;
 
-        public event Action OnReady = () => { };
+        public event Action<Order> OnReady = (order) => { };
 
         public int OrderId { get; private set; }
+
+        public Pizzeria Pizzeria { get; private set; }
 
         public string ClientName { get; private set; }
 
@@ -20,22 +22,36 @@ namespace Task_3._3._3
 
         public int WaitingTime { get; private set; }
 
-        public bool IsReady { get; private set; } = false;
+        public bool Completed { get; private set; } = false;
 
         public List<Pizza> OrderedPizza { get; private set; }
 
-        public Order(string clientName, int cost, int waitingTime, List<Pizza> orderedPizza)
+        public Order(string clientName, Pizzeria pizzeria, int cost, int waitingTime, List<Pizza> orderedPizza)
         {
             OrderId = _orderIdCount++;
+            Pizzeria = pizzeria;
             ClientName = clientName;
             Cost = cost;
             WaitingTime = waitingTime;
             OrderedPizza = orderedPizza;
+
+            Cooking();
+
+            pizzeria.OnPickedUp += OnPickedUp;
         }
 
-        public void OrderReady()
+        private void Cooking()
         {
-            OnReady();
+            Console.WriteLine("Заказ готовится...");
+
+            Thread.Sleep(WaitingTime * 500);
+
+            OnReady(this);
+        }
+
+        public void OnPickedUp(Order order)
+        {
+            order.Completed = true;
         }
     }
 }

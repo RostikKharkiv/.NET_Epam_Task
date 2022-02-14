@@ -8,6 +8,7 @@ namespace Task_3._3._3
 {
     public class Pizzeria
     {
+        private int _pizzeriaId = 0;
         private Pepperoni _pepperoni = new Pepperoni();
         private Cheesy _cheesy = new Cheesy();
         private Hawaii _hawaii = new Hawaii();
@@ -15,8 +16,27 @@ namespace Task_3._3._3
         private Common _common = new Common();
         private Mushroom _mushroom = new Mushroom();
         private List<Order> _orders = new List<Order>();
+        private List<Order> _readyOrders = new List<Order>();
 
-        public IEnumerable<Order> ReadyOrders => _orders.Where(o => o.IsReady == true);
+        public event Action<Order> OnPickedUp = (order) => { };
+
+        public int Id { get; private set; }
+
+        public string Name { get; private set; }
+
+        public string Adress { get; private set; }
+
+        public string PhoneNumber { get; private set; }
+
+        public IEnumerable<Order> ReadyOrders => _readyOrders;
+
+        public Pizzeria(string name, string adress, string phoneNumber)
+        {
+            Id = _pizzeriaId++;
+            Name = name;
+            Adress = adress;
+            PhoneNumber = phoneNumber;
+        }
 
         public string Menu()
         {
@@ -30,16 +50,22 @@ namespace Task_3._3._3
             int orderCost = orderedPizza.Select(o => o.Cost).Sum();
             int cookingTime = orderedPizza.Select(o => o.CookingTimeInMinutes).Sum();
 
-            Order order = new Order(firstName, orderCost, cookingTime, orderedPizza);
+            Order order = new Order(firstName, this, orderCost, cookingTime, orderedPizza);
 
             order.OnReady += OnOrderReady;
             return order;
         }
 
-        public void OnOrderReady()
+        public void OnOrderReady(Order order)
         {
-
+            order.OnReady -= OnOrderReady;
+            ReadyOrders.Append(order);
+            Console.WriteLine($"{order.ClientName}, ваш заказ {order.OrderId} готов");
         }
 
+        public void ClientPickUpOrder(Order order)
+        {
+            OnPickedUp(order);
+        }
     }
 }

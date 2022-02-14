@@ -11,7 +11,9 @@ namespace Task_3._3._3
         private static int _clientIdCount = 0;
         private List<Order> _orders = new List<Order>();
 
-        public IEnumerable<Order> UpcomingOrders => _orders.Where(o => o.IsReady == false);
+        public IEnumerable<Order> UpcomingOrders => _orders.Where(o => o.Completed == false);
+
+        public IEnumerable<Order> CompletedOrders => _orders.Where(o => o.Completed == true);
         
         public int ClientId { get; private set; }
 
@@ -30,9 +32,29 @@ namespace Task_3._3._3
         {
             int orderCost = orderedPizza.Select(o => o.Cost).Sum();
 
+            if (orderCost > WalletWithMoney)
+            {
+                Console.WriteLine("У вас недостаточно денег");
+                return;
+            }
+
             WalletWithMoney -= orderCost;
 
-            _orders.Add(pizzeria.Checkout(orderedPizza, FirstName));
+            Order order = pizzeria.Checkout(orderedPizza, FirstName);
+
+            _orders.Add(order);
+        }
+
+        public void PickUpOrder(Pizzeria pizzeria, Order order)
+        {
+            order = (Order)pizzeria.ReadyOrders.Where(o => o.Equals(UpcomingOrders.FirstOrDefault()));
+
+            if (order is null)
+            {
+                return;
+            }
+
+            pizzeria.ClientPickUpOrder(order);
         }
     }
 }
