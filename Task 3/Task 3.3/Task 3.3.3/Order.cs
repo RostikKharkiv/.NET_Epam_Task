@@ -8,7 +8,7 @@ namespace Task_3._3._3
 {
     public class Order
     {
-        private static int _orderIdCount = 0;
+        private static int _orderIdCount = 200;
 
         public event Action<Order> OnReady = (order) => { };
 
@@ -21,6 +21,8 @@ namespace Task_3._3._3
         public int Cost { get; private set; }
 
         public int WaitingTime { get; private set; }
+
+        public bool Ready { get; private set; } = false;
 
         public bool Completed { get; private set; } = false;
 
@@ -35,16 +37,16 @@ namespace Task_3._3._3
             WaitingTime = waitingTime;
             OrderedPizza = orderedPizza;
 
-            Cooking();
-
             pizzeria.OnPickedUp += OnPickedUp;
         }
 
-        private void Cooking()
+        public void Cooking()
         {
-            Console.WriteLine("Заказ готовится...");
+            Console.WriteLine($"Заказ номер {OrderId} готовится...");
 
             Thread.Sleep(WaitingTime * 500);
+
+            Ready = true;
 
             OnReady(this);
         }

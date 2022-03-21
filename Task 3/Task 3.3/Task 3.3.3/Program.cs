@@ -10,11 +10,15 @@ namespace Task_3._3._3 // Note: actual namespace depends on the project name.
         {
             Pizzeria pizzeria = new Pizzeria("Пиццерия Epam", "Белоглинская 75/81", "89954002319");
 
-            Client client = new Client("Дмитрий", 2000);
+            Client client1 = new Client("Дмитрий", 2000);
+            Client client2 = new Client("Захар", 3000);
+            Client client3 = new Client("Добрыня", 1000);
 
-            Console.WriteLine(pizzeria.Menu());
+            client1.MakeAnOrder(new List<Pizza> { new Pepperoni(), new Cheesy() }, pizzeria);
+            client2.MakeAnOrder(new List<Pizza> { new Pepperoni() }, pizzeria);
+            client3.MakeAnOrder(new List<Pizza> { new Hawaii() }, pizzeria);
 
-            client.MakeAnOrder(new List<Pizza> { new Pepperoni(), new Cheesy() }, pizzeria);
+            pizzeria.Cooking();
 
         }
     }

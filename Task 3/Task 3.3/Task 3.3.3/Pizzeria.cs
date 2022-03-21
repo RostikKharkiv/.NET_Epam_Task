@@ -53,14 +53,22 @@ namespace Task_3._3._3
             Order order = new Order(firstName, this, orderCost, cookingTime, orderedPizza);
 
             order.OnReady += OnOrderReady;
+
+            _orders.Add(order);
+
             return order;
+        }
+
+        public void Cooking()
+        {
+            _orders.Where(o => o.Ready == false && o.Completed == false).ToList().ForEach(o => o.Cooking());
         }
 
         public void OnOrderReady(Order order)
         {
             order.OnReady -= OnOrderReady;
             ReadyOrders.Append(order);
-            Console.WriteLine($"{order.ClientName}, ваш заказ {order.OrderId} готов");
+            Console.WriteLine($"{order.ClientName}, ваш заказ номер {order.OrderId} готов");
         }
 
         public void ClientPickUpOrder(Order order)
